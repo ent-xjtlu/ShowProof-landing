@@ -1,0 +1,223 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<style>
+  @font-face {
+    font-family: 'Archivo Variable';
+    src: url('../node_modules/@fontsource-variable/archivo/files/archivo-latin-wght-normal.woff2') format('woff2');
+    font-weight: 100 900;
+  }
+  @font-face {
+    font-family: 'IBM Plex Mono';
+    src: url('../node_modules/@fontsource/ibm-plex-mono/files/ibm-plex-mono-latin-500-normal.woff2') format('woff2');
+    font-weight: 500;
+  }
+  :root {
+    --paper: #f2f0e9;
+    --paper-light: #faf9f5;
+    --ink: #191c1b;
+    --muted: #686b65;
+    --rust: #b5492a;
+    --rust-deep: #8a2c0f;
+    --peach: #e6b28c;
+    --line: rgba(25, 28, 27, 0.16);
+  }
+  * { box-sizing: border-box; margin: 0; }
+  html, body { background: #dcd9d0; }
+  .sheet {
+    position: relative;
+    width: 1080px;
+    height: 1080px;
+    margin: 0 auto;
+    background: var(--paper);
+    color: var(--ink);
+    overflow: hidden;
+    font-family: 'Archivo Variable', 'Noto Sans CJK SC', sans-serif;
+    display: flex;
+    flex-direction: column;
+  }
+  .frame {
+    position: absolute;
+    inset: 26px;
+    border: 1.5px solid var(--ink);
+    pointer-events: none;
+  }
+  .frame::after {
+    content: '';
+    position: absolute;
+    inset: 7px;
+    border: 1px solid var(--line);
+  }
+  .grid-bg {
+    position: absolute;
+    inset: 0;
+    background-image:
+      linear-gradient(var(--line) 1px, transparent 1px),
+      linear-gradient(90deg, var(--line) 1px, transparent 1px);
+    background-size: 90px 90px;
+    opacity: 0.2;
+    mask-image: radial-gradient(120% 90% at 50% 42%, black 30%, transparent 78%);
+    -webkit-mask-image: radial-gradient(120% 90% at 50% 42%, black 30%, transparent 78%);
+  }
+
+  /* top: horizontal lockup */
+  .topbar {
+    position: relative;
+    z-index: 1;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 64px 72px 0;
+  }
+  .lockup-h { display: flex; align-items: center; gap: 26px; }
+  .lockup-h img { width: 78px; height: 78px; display: block; }
+  .lockup-h .rule { width: 1.5px; height: 68px; background: var(--rust); opacity: 0.65; }
+  .lockup-h .stack { display: flex; flex-direction: column; gap: 12px; }
+  .lockup-h .word { display: flex; align-items: baseline; gap: 18px; }
+  .lockup-h .word b {
+    font-size: 56px;
+    font-weight: 850;
+    letter-spacing: -1.5px;
+    line-height: 1;
+  }
+  .lockup-h .word span {
+    font-family: 'Noto Sans CJK SC', sans-serif;
+    font-weight: 900;
+    font-size: 40px;
+    color: var(--rust);
+    letter-spacing: 0.18em;
+    margin-right: -0.18em;
+    line-height: 1;
+  }
+  .lockup-h .tag {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 14px;
+    letter-spacing: 0.24em;
+    color: var(--rust);
+  }
+  .topbar .meta {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 13px;
+    letter-spacing: 0.18em;
+    color: var(--muted);
+    text-align: right;
+    line-height: 2;
+  }
+  .topbar .meta b { color: var(--ink); font-weight: 500; }
+
+  /* center: vertical lockup */
+  .hero {
+    position: relative;
+    z-index: 1;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+  }
+  .hero img { width: 288px; height: 288px; display: block; }
+  .hero .word { margin-top: 42px; display: flex; align-items: baseline; gap: 32px; }
+  .hero .word b {
+    font-size: 112px;
+    font-weight: 850;
+    letter-spacing: -3px;
+    line-height: 1;
+  }
+  .hero .word span {
+    font-family: 'Noto Sans CJK SC', sans-serif;
+    font-weight: 900;
+    font-size: 62px;
+    color: var(--rust);
+    letter-spacing: 0.3em;
+    margin-right: -0.3em;
+    line-height: 1;
+  }
+  .hero .rule { margin-top: 36px; width: 360px; height: 1.5px; background: var(--peach); }
+  .hero .tag {
+    margin-top: 26px;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 19px;
+    letter-spacing: 0.34em;
+    margin-right: -0.34em;
+    color: var(--rust);
+  }
+
+  /* bottom: palette + note */
+  .base {
+    position: relative;
+    z-index: 1;
+    padding: 0 72px 60px;
+  }
+  .base .hairline { height: 1px; background: var(--line); margin-bottom: 26px; }
+  .base .row { display: flex; align-items: flex-end; justify-content: space-between; gap: 40px; }
+  .swatches { display: flex; gap: 14px; }
+  .swatch { display: flex; flex-direction: column; gap: 9px; }
+  .swatch i {
+    display: block;
+    width: 88px;
+    height: 52px;
+    border-radius: 8px;
+    border: 1px solid rgba(25, 28, 27, 0.14);
+  }
+  .swatch span {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.06em;
+    color: var(--muted);
+    line-height: 1.55;
+  }
+  .base .note {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 12.5px;
+    letter-spacing: 0.18em;
+    color: var(--muted);
+    text-align: right;
+    line-height: 2;
+  }
+  .base .note b { color: var(--rust); font-weight: 500; }
+</style>
+</head>
+<body>
+<div class="sheet">
+  <div class="grid-bg"></div>
+  <div class="frame"></div>
+
+  <div class="topbar">
+    <div class="lockup-h">
+      <img src="mark.svg" alt="">
+      <div class="rule"></div>
+      <div class="stack">
+        <div class="word"><b>ExVis</b><span>展 视</span></div>
+        <div class="tag">MARKET INTELLIGENCE, VERIFIED.</div>
+      </div>
+    </div>
+    <div class="meta"><b>BRAND SHEET</b><br>EXVIS · EDITION 2026.11</div>
+  </div>
+
+  <div class="hero">
+    <img src="mark.svg" alt="">
+    <div class="word"><b>ExVis</b><span>展 视</span></div>
+    <div class="rule"></div>
+    <div class="tag">MARKET INTELLIGENCE, VERIFIED.</div>
+  </div>
+
+  <div class="base">
+    <div class="hairline"></div>
+    <div class="row">
+      <div class="swatches">
+        <div class="swatch"><i style="background:#f2f0e9"></i><span>PAPER<br>#F2F0E9</span></div>
+        <div class="swatch"><i style="background:#191c1b"></i><span>INK<br>#191C1B</span></div>
+        <div class="swatch"><i style="background:#b5492a"></i><span>RUST<br>#B5492A</span></div>
+        <div class="swatch"><i style="background:#8a2c0f"></i><span>RUST DEEP<br>#8A2C0F</span></div>
+        <div class="swatch"><i style="background:#e6b28c"></i><span>PEACH<br>#E6B28C</span></div>
+      </div>
+      <div class="note">
+        GRAPHIC MARK · WORDMARK<br>
+        <b>LOCKUP — VERTICAL / HORIZONTAL</b>
+      </div>
+    </div>
+  </div>
+</div>
+</body>
+</html>
