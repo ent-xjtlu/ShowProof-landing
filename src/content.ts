@@ -3,7 +3,7 @@ export type Language = 'zh' | 'en'
 export const CONTENT = {
   zh: {
     meta: {
-      title: '拾证｜让每一次参展，都有据可依',
+      title: 'ExVis 展视｜让每一次参展，都有据可依',
       description: '拾证从企业画像出发，发现相关展会、调查参展企业、估算参展费用，生成有来源、可执行的参展决策报告。',
     },
     brand: '拾证',
@@ -144,7 +144,7 @@ export const CONTENT = {
   },
   en: {
     meta: {
-      title: 'ShowProof | Find exhibitions worth showing up for',
+      title: 'ExVis | Find exhibitions worth showing up for',
       description: 'ShowProof discovers relevant exhibitions, researches exhibitors and estimates costs from your company profile, turning scattered information into an evidence-backed action plan.',
     },
     brand: 'ShowProof',

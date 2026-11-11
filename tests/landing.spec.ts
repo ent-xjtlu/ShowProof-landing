@@ -74,7 +74,7 @@ test('英文模式翻译完整页面并记住语言选择', async ({ page }) => 
 
   await expect(page.getByRole('heading', { level: 1 })).toContainText('Find the exhibitions')
   await expect(page.locator('html')).toHaveAttribute('lang', 'en')
-  await expect(page).toHaveTitle('ShowProof | Find exhibitions worth showing up for')
+  await expect(page).toHaveTitle('ExVis | Find exhibitions worth showing up for')
   await expect(page.locator('#features')).toContainText('Exhibitor research')
   await expect(page.locator('#workflow')).toContainText('Build your company profile')
   await expect(page.locator('.hero-report__meta')).toContainText('Sample data · Not real research results')
