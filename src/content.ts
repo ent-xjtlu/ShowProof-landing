@@ -127,7 +127,7 @@ export const CONTENT = {
     },
     footer: {
       tagline: '展视 · 展会与企业信息助手',
-      copyright: '© 2026 Domel',
+      copyright: '© 2026 ExVis 展视',
     },
   },
   en: {
@@ -256,7 +256,7 @@ export const CONTENT = {
     },
     footer: {
       tagline: 'ExVis · Exhibition & company intelligence',
-      copyright: '© 2026 Domel',
+      copyright: '© 2026 ExVis',
     },
   },
 } as const
