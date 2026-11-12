@@ -1,18 +1,18 @@
 import { expect, test } from '@playwright/test'
 
-test('宣传页展示产品价值、核心能力与真实演示视频', async ({ page, request }) => {
+test('宣传页展示产品价值、核心能力与宣传片', async ({ page, request }) => {
   await page.goto('/')
 
   await expect(page.getByRole('heading', { level: 1 })).toContainText('别让好机会')
   await expect(page.locator('.landing-hero').getByRole('link', { name: '了解产品能力' })).toHaveAttribute('href', '#features')
-  await expect(page.locator('.hero-report__meta')).toContainText('示例数据 · 非真实调查结果')
+  await expect(page.locator('main')).not.toContainText('示例数据')
   await expect(page.locator('#features')).toContainText('参展企业调查')
   await expect(page.locator('#workflow')).toContainText('建立企业画像')
 
-  const video = page.getByLabel('展视产品演示视频')
+  const video = page.getByLabel('展视宣传片')
   await expect(video).toHaveAttribute('controls', '')
-  await expect(video).toHaveAttribute('src', '/product-demo.mp4')
-  expect((await request.get('/product-demo.mp4')).ok()).toBe(true)
+  await expect(video).toHaveAttribute('src', '/exvis-overview-zh.mp4')
+  expect((await request.get('/exvis-overview-zh.mp4')).ok()).toBe(true)
 })
 
 test('独立站按钮均为页内跳转且不包含联系方式', async ({ page }) => {
@@ -77,7 +77,7 @@ test('英文模式翻译完整页面并记住语言选择', async ({ page }) => 
   await expect(page).toHaveTitle('ExVis | Find exhibitions worth showing up for')
   await expect(page.locator('#features')).toContainText('Exhibitor research')
   await expect(page.locator('#workflow')).toContainText('Build your company profile')
-  await expect(page.locator('.hero-report__meta')).toContainText('Sample data · Not real research results')
+  await expect(page.locator('main')).not.toContainText('Sample data')
   await expect(page.locator('#faq')).toContainText('Can I use ExVis without a QCC account?')
 
   await page.reload()
@@ -98,7 +98,7 @@ test('移动端菜单可以切换英文', async ({ page }) => {
 })
 
 
-test('英文长文案在不同宽度下不会覆盖功能卡底部标签', async ({ page }) => {
+test('英文长文案在不同宽度下保持在功能卡内', async ({ page }) => {
   await page.addInitScript(() => window.localStorage.setItem('shizheng-language', 'en'))
 
   for (const width of [1440, 1024, 320]) {
@@ -106,11 +106,23 @@ test('英文长文案在不同宽度下不会覆盖功能卡底部标签', async
     await page.goto('/')
     const overlaps = await page.locator('.feature-card').evaluateAll((cards) => cards.flatMap((card) => {
       const description = card.querySelector('.feature-card__description')!.getBoundingClientRect()
-      const noteElement = card.querySelector('.feature-card__note')!
-      const note = noteElement.getBoundingClientRect()
-      const noteTextTop = note.top + Number.parseFloat(getComputedStyle(noteElement).paddingTop)
-      return description.bottom > noteTextTop - 6 ? [card.querySelector('h3')!.textContent] : []
+      const bounds = card.getBoundingClientRect()
+      return description.bottom > bounds.bottom || description.right > bounds.right ? [card.querySelector('h3')!.textContent] : []
     }))
     expect(overlaps, `viewport ${width}px`).toEqual([])
   }
+})
+
+test('宣传片默认静音并跟随页面语言', async ({ page }) => {
+  await page.goto('/?lang=en#demo')
+  const player = page.locator('#demo video')
+  await expect(player).toHaveCount(1)
+  await expect(page.locator('#demo button')).toHaveCount(0)
+  await expect(player).toHaveAttribute('src', '/exvis-overview-en.mp4')
+  await expect(player).toHaveJSProperty('muted', true)
+
+  await page.getByRole('button', { name: '切换到中文' }).click()
+  await expect(player).toHaveAttribute('src', '/exvis-overview-zh.mp4')
+  await expect(player).toHaveJSProperty('muted', true)
+  await expect(page).toHaveURL(/lang=zh#demo$/)
 })

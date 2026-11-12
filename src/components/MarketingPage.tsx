@@ -37,6 +37,8 @@ const LANGUAGE_KEY = 'shizheng-language'
 const GITHUB_URL = 'https://github.com/ent-xjtlu/ShowProof'
 
 function getInitialLanguage(): Language {
+  const requested = new URLSearchParams(window.location.search).get('lang')
+  if (requested === 'en' || requested === 'zh') return requested
   try {
     return window.localStorage.getItem(LANGUAGE_KEY) === 'en' ? 'en' : 'zh'
   } catch {
@@ -71,6 +73,7 @@ function Brand({ homeLabel }: { homeLabel: string }) {
 export function MarketingPage() {
   const [language, setLanguage] = useState<Language>(getInitialLanguage)
   const copy = CONTENT[language]
+  const filmPath = `/exvis-overview-${language}`
   const headerRef = useRef<HTMLElement>(null)
   const headerInnerRef = useRef<HTMLDivElement>(null)
   const menuRef = useRef<HTMLUListElement>(null)
@@ -184,7 +187,13 @@ export function MarketingPage() {
   }
 
   const switchLanguage = () => {
-    setLanguage((current) => current === 'zh' ? 'en' : 'zh')
+    const next = language === 'zh' ? 'en' : 'zh'
+    const url = new URL(window.location.href)
+    if (url.searchParams.has('lang')) {
+      url.searchParams.set('lang', next)
+      window.history.replaceState(window.history.state, '', url)
+    }
+    setLanguage(next)
     closeMenu()
   }
 
@@ -240,43 +249,37 @@ export function MarketingPage() {
               </ul>
             </div>
 
-            <div className="landing-hero__visual" aria-label={copy.report.aria}>
+            <div className="landing-hero__visual" role="group" aria-label={copy.report.aria}>
               <div className="hero-report">
                 <div className="hero-report__bar">
-                  <div className="hero-report__mini-brand"><span className="landing-brand__mark" aria-hidden="true"><ExVisMark /></span><b>ExVis<span className="landing-brand__zh">展视</span></b><span>/ EXHIBITION REPORT</span></div>
-                  <span className="hero-report__status"><i /> {copy.report.status}</span>
+                  <div className="hero-report__mini-brand"><span className="landing-brand__mark" aria-hidden="true"><ExVisMark /></span><b>ExVis<span className="landing-brand__zh">展视</span></b><span>/ {copy.report.heading}</span></div>
                 </div>
                 <div className="hero-report__body">
-                  <div className="hero-report__meta"><span>{copy.report.number}</span><span>{copy.report.sample}</span></div>
                   <div className="hero-report__title-row">
                     <div>
-                      <p>{copy.report.industry}</p>
                       <h2>{copy.report.name}</h2>
-                      <span>{copy.report.date}</span>
+                      <span>{copy.report.context}</span>
                     </div>
                     <div className="hero-score"><strong>73</strong><span>{copy.report.score}</span></div>
                   </div>
-                  <div className="hero-verdict"><CircleCheck size={17} aria-hidden="true" /><strong>{copy.report.verdict}</strong><span>{copy.report.verdictNote}</span></div>
+                  <div className="hero-verdict"><CircleCheck size={17} aria-hidden="true" /><strong>{copy.report.verdict}</strong></div>
                   <div className="hero-report__stats">
                     {copy.report.stats.map((stat) => <div key={stat.label}><strong>{stat.value}</strong><span>{stat.label}</span></div>)}
                   </div>
-                  <div className="hero-report__section-head"><span>{copy.report.companiesTitle}</span><span>{copy.report.relationTitle}</span></div>
+                  <div className="hero-report__section-head"><span>{copy.report.companiesTitle}</span><span>{copy.report.booth}</span></div>
                   {copy.report.companies.map((company) => (
-                    <div className="hero-company" key={company.index}>
-                      <span className="hero-company__index">{company.index}</span>
+                    <div className="hero-company" key={company.name}>
                       <div><strong>{company.name}</strong><small>{company.detail}</small></div>
                       <span className={`hero-role ${company.roleClass}`}>{company.role}</span>
-                      <b>{company.confidence}</b>
+                      <b>{company.booth}</b>
                     </div>
                   ))}
                   <div className="hero-report__bottom">
-                    <div><span>{copy.report.costLabel}</span><strong>¥18,000 <i>—</i> ¥22,500</strong><small>{copy.report.costNote}</small></div>
+                    <div><span>{copy.report.costLabel}</span><strong>¥4,300 <i>—</i> ¥11,800</strong><small>{copy.report.costBasis}</small></div>
                     <span className="hero-report__export"><FileText size={15} aria-hidden="true" /> {copy.report.export} <ArrowUpRight size={14} aria-hidden="true" /></span>
                   </div>
                 </div>
               </div>
-              <div className="hero-evidence-note"><ShieldCheck size={20} aria-hidden="true" /><div><strong>{copy.report.evidenceTitle}</strong><span>{copy.report.evidenceNote}</span></div><span>03</span></div>
-              <span className="hero-visual__caption">{copy.report.caption}</span>
             </div>
           </div>
           <div className="landing-shell landing-hero__foot"><span>{copy.hero.foot}</span><a href="#features">{copy.hero.down} <span aria-hidden="true">↓</span></a></div>
@@ -307,7 +310,6 @@ export function MarketingPage() {
                     <p className="feature-card__subtitle">{feature.subtitle}</p>
                     <h3>{feature.title}</h3>
                     <p className="feature-card__description">{feature.description}</p>
-                    <p className="feature-card__note"><span />{feature.note}</p>
                   </article>
                 )
               })}
@@ -337,14 +339,15 @@ export function MarketingPage() {
         <section className="landing-demo" id="demo" tabIndex={-1} aria-labelledby="demo-title">
           <div className="landing-shell">
             <div className="landing-section-heading">
-              <div><p className="landing-section-kicker">{copy.demo.kicker}</p><h2 id="demo-title">{copy.demo.title}</h2></div>
+              <h2 id="demo-title">{copy.demo.title}</h2>
               <p>{copy.demo.intro}</p>
             </div>
             <div className="landing-demo__frame">
-              <div className="landing-demo__bar"><span><i /><i /><i /></span><p>{copy.demo.bar}</p><span>PLAY / REVIEW</span></div>
-              <video aria-label={copy.demo.aria} src="/product-demo.mp4" controls preload="metadata" playsInline>{copy.demo.fallback}</video>
+              <video key={language} aria-label={copy.demo.aria} src={`${filmPath}.mp4`} poster={`${filmPath}.webp`} controls muted preload="metadata" playsInline>
+                <a href={`${filmPath}.mp4`}>{copy.demo.fallback}</a>
+              </video>
             </div>
-            <div className="landing-demo__notes"><span><Play size={14} aria-hidden="true" /> {copy.demo.noteA}</span><span>{copy.demo.noteB}</span><a href="#top">{copy.demo.back} <ArrowUpRight size={14} aria-hidden="true" /></a></div>
+            <a className="landing-demo__back" href="#top">{copy.demo.back} <ArrowUpRight size={14} aria-hidden="true" /></a>
           </div>
         </section>
 
