@@ -9,7 +9,7 @@ test('宣传页展示产品价值、核心能力与真实演示视频', async ({
   await expect(page.locator('#features')).toContainText('参展企业调查')
   await expect(page.locator('#workflow')).toContainText('建立企业画像')
 
-  const video = page.getByLabel('拾证产品演示视频')
+  const video = page.getByLabel('展视产品演示视频')
   await expect(video).toHaveAttribute('controls', '')
   await expect(video).toHaveAttribute('src', '/product-demo.mp4')
   expect((await request.get('/product-demo.mp4')).ok()).toBe(true)
@@ -49,7 +49,7 @@ test('常见问题可以展开阅读', async ({ page }) => {
   const question = page.getByText('没有企查查账号，可以使用吗？', { exact: true })
   await question.click()
 
-  await expect(page.getByText('可以。拾证默认使用公开网页完成展会与企业调查。', { exact: false })).toBeVisible()
+  await expect(page.getByText('可以。展视默认使用公开网页完成展会与企业调查。', { exact: false })).toBeVisible()
 })
 
 
@@ -78,7 +78,7 @@ test('英文模式翻译完整页面并记住语言选择', async ({ page }) => 
   await expect(page.locator('#features')).toContainText('Exhibitor research')
   await expect(page.locator('#workflow')).toContainText('Build your company profile')
   await expect(page.locator('.hero-report__meta')).toContainText('Sample data · Not real research results')
-  await expect(page.locator('#faq')).toContainText('Can I use ShowProof without a QCC account?')
+  await expect(page.locator('#faq')).toContainText('Can I use ExVis without a QCC account?')
 
   await page.reload()
   await expect(page.getByRole('heading', { level: 1 })).toContainText('Find the exhibitions')
