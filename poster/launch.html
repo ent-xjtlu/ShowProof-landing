@@ -1,0 +1,370 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<style>
+  @font-face {
+    font-family: 'Archivo Variable';
+    src: url('../node_modules/@fontsource-variable/archivo/files/archivo-latin-wght-normal.woff2') format('woff2');
+    font-weight: 100 900;
+  }
+  @font-face {
+    font-family: 'IBM Plex Mono';
+    src: url('../node_modules/@fontsource/ibm-plex-mono/files/ibm-plex-mono-latin-500-normal.woff2') format('woff2');
+    font-weight: 500;
+  }
+  :root {
+    --paper: #f2f0e9;
+    --paper-light: #faf9f5;
+    --ink: #191c1b;
+    --muted: #686b65;
+    --rust: #b5492a;
+    --rust-deep: #8a2c0f;
+    --peach: #e6b28c;
+  }
+  * { box-sizing: border-box; margin: 0; }
+  html, body { background: #dcd9d0; }
+  .sheet {
+    position: relative;
+    width: 1080px;
+    height: 1440px;
+    margin: 0 auto;
+    overflow: hidden;
+    background: var(--paper);
+    color: var(--ink);
+    font-family: 'Archivo Variable', 'Noto Sans CJK SC', sans-serif;
+  }
+  .topbar {
+    height: 132px;
+    padding: 0 64px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  .brand { display: flex; align-items: center; gap: 18px; }
+  .brand img { width: 58px; height: 58px; }
+  .brand-name { display: flex; align-items: baseline; gap: 14px; }
+  .brand-name b { font-size: 40px; font-weight: 850; letter-spacing: -1px; }
+  .brand-name span {
+    font-family: 'Noto Sans CJK SC', sans-serif;
+    font-size: 27px;
+    font-weight: 900;
+    color: var(--rust);
+    letter-spacing: .18em;
+  }
+  .edition {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 12px;
+    line-height: 1.8;
+    letter-spacing: .16em;
+    text-align: right;
+    color: var(--muted);
+  }
+  .edition b { color: var(--ink); font-weight: 500; }
+  .hero {
+    position: relative;
+    height: 866px;
+    overflow: hidden;
+    background: var(--ink);
+    color: var(--paper-light);
+  }
+  .hero::before {
+    content: '';
+    position: absolute;
+    width: 700px;
+    height: 700px;
+    right: -190px;
+    top: 120px;
+    border-radius: 50%;
+    background: var(--rust);
+  }
+  .hero::after {
+    content: '';
+    position: absolute;
+    width: 570px;
+    height: 570px;
+    right: -125px;
+    top: 185px;
+    border-radius: 50%;
+    border: 1px solid rgba(250,249,245,.26);
+  }
+  .coordinates {
+    position: absolute;
+    inset: 0;
+    opacity: .12;
+    background-image:
+      linear-gradient(rgba(250,249,245,.32) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(250,249,245,.32) 1px, transparent 1px);
+    background-size: 72px 72px;
+    mask-image: linear-gradient(90deg, black, transparent 68%);
+    -webkit-mask-image: linear-gradient(90deg, black, transparent 68%);
+  }
+  .hero-inner { position: relative; z-index: 2; height: 100%; padding: 64px; }
+  .kicker {
+    display: flex;
+    align-items: center;
+    gap: 18px;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 13px;
+    letter-spacing: .22em;
+    color: var(--peach);
+  }
+  .kicker::before { content: ''; width: 34px; height: 2px; background: var(--peach); }
+  h1 {
+    margin-top: 38px;
+    font-family: 'Noto Sans CJK SC', sans-serif;
+    font-size: 102px;
+    font-weight: 900;
+    line-height: 1.18;
+    letter-spacing: -.035em;
+  }
+  h1 .answer { position: relative; display: inline-block; color: var(--peach); }
+  h1 .answer::after {
+    content: '';
+    position: absolute;
+    left: 2px;
+    right: -4px;
+    bottom: -7px;
+    height: 6px;
+    background: var(--rust);
+  }
+  .lead {
+    margin-top: 30px;
+    width: 545px;
+    font-family: 'Noto Sans CJK SC', sans-serif;
+    font-size: 20px;
+    line-height: 1.85;
+    color: rgba(250,249,245,.72);
+  }
+  .lead b { color: var(--paper-light); font-weight: 700; }
+  .questions {
+    position: absolute;
+    left: 64px;
+    bottom: 60px;
+    width: 470px;
+    border-top: 1px solid rgba(250,249,245,.28);
+  }
+  .question {
+    display: grid;
+    grid-template-columns: 48px 1fr;
+    align-items: center;
+    min-height: 66px;
+    border-bottom: 1px solid rgba(250,249,245,.18);
+    font-family: 'Noto Sans CJK SC', sans-serif;
+    font-size: 19px;
+    letter-spacing: .04em;
+  }
+  .question span {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 12px;
+    color: var(--peach);
+    letter-spacing: .08em;
+  }
+  .report {
+    position: absolute;
+    z-index: 3;
+    right: 61px;
+    bottom: 62px;
+    width: 370px;
+    height: 346px;
+    padding: 28px;
+    background: var(--paper-light);
+    color: var(--ink);
+    box-shadow: 18px 18px 0 rgba(25,28,27,.18);
+    transform: rotate(-3deg);
+  }
+  .report-head {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-bottom: 18px;
+    border-bottom: 1px solid rgba(25,28,27,.18);
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10px;
+    letter-spacing: .14em;
+  }
+  .report-head b { color: var(--rust); font-weight: 500; }
+  .report-label {
+    margin-top: 25px;
+    font-family: 'Noto Sans CJK SC', sans-serif;
+    font-size: 14px;
+    color: var(--muted);
+  }
+  .verdict {
+    margin-top: 5px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    font-family: 'Noto Sans CJK SC', sans-serif;
+    font-size: 43px;
+    font-weight: 900;
+    letter-spacing: .02em;
+  }
+  .verdict svg { flex: none; }
+  .evidence {
+    margin-top: 26px;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+  }
+  .evidence div {
+    padding: 12px 10px;
+    background: #eeeae0;
+    font-family: 'Noto Sans CJK SC', sans-serif;
+    font-size: 12px;
+    text-align: center;
+    color: #484c48;
+  }
+  .report-foot {
+    margin-top: 22px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10px;
+    letter-spacing: .1em;
+    color: var(--rust);
+  }
+  .report-foot::before { content: ''; width: 22px; height: 2px; background: var(--rust); }
+  .registration {
+    position: absolute;
+    z-index: 4;
+    right: 40px;
+    top: 38px;
+    width: 30px;
+    height: 30px;
+    border: 1px solid rgba(250,249,245,.65);
+    border-radius: 50%;
+  }
+  .registration::before, .registration::after { content: ''; position: absolute; background: rgba(250,249,245,.65); }
+  .registration::before { width: 42px; height: 1px; left: -7px; top: 14px; }
+  .registration::after { width: 1px; height: 42px; left: 14px; top: -7px; }
+  .details { padding: 52px 64px 0; }
+  .details-title {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: 30px;
+  }
+  .details-title h2 {
+    font-family: 'Noto Sans CJK SC', sans-serif;
+    font-size: 42px;
+    font-weight: 900;
+    line-height: 1.35;
+    letter-spacing: -.02em;
+  }
+  .details-title h2 em { font-style: normal; color: var(--rust); }
+  .details-title p {
+    padding-bottom: 6px;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11px;
+    line-height: 1.8;
+    letter-spacing: .14em;
+    text-align: right;
+    color: var(--muted);
+  }
+  .capabilities {
+    margin-top: 35px;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    border-top: 1.5px solid var(--ink);
+    border-bottom: 1px solid rgba(25,28,27,.2);
+  }
+  .capability { padding: 23px 24px 25px 0; }
+  .capability + .capability { padding-left: 24px; border-left: 1px solid rgba(25,28,27,.2); }
+  .capability .num {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11px;
+    letter-spacing: .16em;
+    color: var(--rust);
+  }
+  .capability h3 {
+    margin-top: 10px;
+    font-family: 'Noto Sans CJK SC', sans-serif;
+    font-size: 20px;
+    font-weight: 800;
+  }
+  .capability p {
+    margin-top: 8px;
+    font-family: 'Noto Sans CJK SC', sans-serif;
+    font-size: 13px;
+    line-height: 1.75;
+    color: var(--muted);
+  }
+  .footer {
+    margin-top: 27px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  .footer .promise {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    font-family: 'Noto Sans CJK SC', sans-serif;
+    font-size: 14px;
+    font-weight: 700;
+    letter-spacing: .08em;
+  }
+  .footer .promise i { width: 8px; height: 8px; border-radius: 50%; background: var(--rust); }
+  .footer .tagline {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11px;
+    letter-spacing: .16em;
+    color: var(--rust);
+  }
+</style>
+</head>
+<body>
+<div class="sheet">
+  <header class="topbar">
+    <div class="brand">
+      <img src="mark.svg" alt="">
+      <div class="brand-name"><b>ExVis</b><span>展视</span></div>
+    </div>
+    <div class="edition"><b>EXHIBITION INTELLIGENCE</b><br>PRODUCT POSTER · 2026</div>
+  </header>
+
+  <main class="hero">
+    <div class="coordinates"></div>
+    <div class="registration"></div>
+    <div class="hero-inner">
+      <div class="kicker">MARKET INTELLIGENCE, VERIFIED.</div>
+      <h1>下一次参展，<br>带着<span class="answer">答案</span>去。</h1>
+      <p class="lead">从企业画像出发，找到值得去的展会，识别客户、伙伴与竞品。把参展判断、费用预算和行动清单，整理成一份<b>有据可查的报告</b>。</p>
+      <div class="questions">
+        <div class="question"><span>01</span>这场展，值得去吗？</div>
+        <div class="question"><span>02</span>到了现场，该去见谁？</div>
+        <div class="question"><span>03</span>这次投入，怎么安排？</div>
+      </div>
+    </div>
+    <section class="report" aria-label="参展决策报告示意图">
+      <div class="report-head"><span>DECISION REPORT</span><b>示例 / DEMO</b></div>
+      <div class="report-label">参展判断</div>
+      <div class="verdict">
+        建议参加
+        <svg width="48" height="48" viewBox="0 0 48 48" fill="none"><circle cx="24" cy="24" r="22" stroke="#b5492a" stroke-width="2"/><path d="m14 24 7 7 14-15" stroke="#b5492a" stroke-width="3" stroke-linecap="square"/></svg>
+      </div>
+      <div class="evidence"><div>重点企业清单</div><div>费用区间估算</div><div>信息来源记录</div><div>现场行动清单</div></div>
+      <div class="report-foot">EVIDENCE BEFORE DECISION</div>
+    </section>
+  </main>
+
+  <section class="details">
+    <div class="details-title">
+      <h2>不是一份名单。<br>是<em>一套参展决策。</em></h2>
+      <p>FROM SCATTERED INFORMATION<br>TO A CLEAR NEXT STEP</p>
+    </div>
+    <div class="capabilities">
+      <div class="capability"><div class="num">01 / DISCOVER</div><h3>发现值得去的展会</h3><p>按业务与目标市场多轮检索，跨轮去重，按匹配度排序。</p></div>
+      <div class="capability"><div class="num">02 / INVESTIGATE</div><h3>提前知道谁在现场</h3><p>识别客户、伙伴、渠道与竞品，逐家给出判断理由。</p></div>
+      <div class="capability"><div class="num">03 / DECIDE</div><h3>带着行动清单出发</h3><p>对比参展、观展与重点拜访，把结论和来源交给团队。</p></div>
+    </div>
+    <footer class="footer">
+      <div class="promise"><i></i>每一个结论，都有出处</div>
+      <div class="tagline">EXVIS · 为市场、销售、外贸与战略团队而做</div>
+    </footer>
+  </section>
+</div>
+</body>
+</html>
