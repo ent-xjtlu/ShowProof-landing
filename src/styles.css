@@ -3,8 +3,8 @@
   --surface: #faf9f5;
   --ink: #191c1b;
   --muted: #686b65;
-  --copper: #a5532d;
-  --accent: #a5532d;
+  --copper: #b5492a;
+  --accent: #b5492a;
   --font-ui: 'Archivo Variable', 'Noto Sans SC', 'Microsoft YaHei UI', sans-serif;
   --font-serif: 'Source Serif 4', 'Noto Serif SC', 'Songti SC', 'SimSun', serif;
   --font-mono: 'IBM Plex Mono', 'Noto Sans SC', ui-monospace, monospace;
@@ -60,7 +60,7 @@ blockquote {
 }
 
 ::selection {
-  background: rgba(165, 83, 45, 0.22);
+  background: rgba(181, 73, 42, 0.22);
 }
 
 :focus-visible {

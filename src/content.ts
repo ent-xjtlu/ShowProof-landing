@@ -21,7 +21,7 @@ export const CONTENT = {
     ],
     headerCta: '宣传片',
     hero: {
-      eyebrow: 'MARKET INTELLIGENCE, VERIFIED.',
+      eyebrow: '#参展决策# 先看匹配，再订展位',
       titleA: '别让好机会，',
       titleB: '淹没在',
       titleHighlight: '展会名录',
@@ -150,7 +150,7 @@ export const CONTENT = {
     ],
     headerCta: 'Product film',
     hero: {
-      eyebrow: 'MARKET INTELLIGENCE, VERIFIED.',
+      eyebrow: 'Know before you book.',
       titleA: 'Find the exhibitions',
       titleB: 'worth ',
       titleHighlight: 'showing up for.',
