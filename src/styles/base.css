@@ -1,0 +1,270 @@
+:root {
+  --paper: #f2f0e9;
+  --surface: #faf9f5;
+  --ink: #191c1b;
+  --muted: #595d57;
+  --copper: #b5492a;
+  --copper-bright: #c86035;
+  --accent: #b5492a;
+  --font-ui: 'Archivo Variable', 'PingFang SC', 'Hiragino Sans GB', 'Noto Sans SC', 'Microsoft YaHei UI', sans-serif;
+  --font-serif: 'Source Serif 4', 'Source Han Serif SC', 'Noto Serif SC', 'Songti SC', 'SimSun', serif;
+  --font-mono: 'IBM Plex Mono', 'PingFang SC', 'Noto Sans SC', ui-monospace, monospace;
+  color-scheme: light;
+  font-family: var(--font-ui);
+  color: var(--ink);
+  background: var(--paper);
+  font-synthesis: none;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html,
+body,
+#root {
+  min-width: 320px;
+  min-height: 100%;
+  margin: 0;
+}
+
+body {
+  min-height: 100vh;
+}
+
+button,
+input,
+textarea,
+select {
+  font: inherit;
+  color: inherit;
+}
+
+button {
+  cursor: pointer;
+}
+
+h1,
+h2,
+h3,
+h4,
+p,
+ul,
+ol,
+dl,
+dd,
+figure,
+blockquote {
+  margin: 0;
+}
+
+p {
+  text-wrap: pretty;
+}
+
+::selection {
+  background: rgba(181, 73, 42, 0.2);
+}
+
+:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 3px;
+}
+
+.landing-page {
+  --landing-paper: #f2f0e9;
+  --landing-paper-light: #faf9f5;
+  --landing-ink: #191c1b;
+  --landing-muted: #595d57;
+  --landing-line: rgba(25, 28, 27, 0.16);
+  --landing-line-strong: rgba(25, 28, 27, 0.28);
+  --landing-copper: #b5492a;
+  --landing-copper-bright: #c86035;
+  --landing-green: #466147;
+  min-height: 100%;
+  overflow: clip;
+  background: var(--landing-paper);
+  color: var(--landing-ink);
+  font-size: 16px;
+  line-height: 1.65;
+}
+
+.landing-page a {
+  color: inherit;
+  text-decoration: none;
+}
+
+.landing-page button,
+.landing-page summary {
+  -webkit-tap-highlight-color: transparent;
+}
+
+.landing-page :focus-visible {
+  outline-color: var(--landing-copper);
+  outline-offset: 4px;
+}
+
+.landing-page section[tabindex="-1"]:focus {
+  outline: none;
+}
+
+.landing-page section[id] {
+  scroll-margin-top: 84px;
+}
+
+.landing-shell {
+  width: min(1280px, calc(100% - 80px));
+  margin-inline: auto;
+}
+
+.landing-skip {
+  position: fixed;
+  z-index: 1000;
+  inset-block-start: 12px;
+  inset-inline-start: 12px;
+  padding: 10px 16px;
+  translate: 0 -160%;
+  background: var(--landing-ink);
+  color: white !important;
+  font-size: 13px;
+  transition: translate 160ms ease;
+}
+
+.landing-skip:focus {
+  translate: 0;
+}
+
+.landing-eyebrow,
+.landing-section-kicker {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  color: var(--landing-copper);
+  font-family: var(--font-mono);
+  font-size: 11.5px;
+  font-weight: 500;
+  letter-spacing: 0.12em;
+  line-height: 1.5;
+}
+
+.landing-eyebrow > span {
+  width: 22px;
+  height: 1px;
+  background: currentColor;
+}
+
+.landing-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 18px;
+  min-height: 52px;
+  padding: 13px 22px;
+  border: 1px solid transparent;
+  font-size: 14px;
+  font-weight: 500;
+  transition:
+    gap 200ms cubic-bezier(0.22, 1, 0.36, 1),
+    background-color 180ms ease,
+    color 180ms ease,
+    border-color 180ms ease,
+    transform 180ms ease;
+}
+
+.landing-button:hover {
+  gap: 26px;
+}
+
+.landing-button:active {
+  transform: translateY(1px);
+}
+
+.landing-button--primary {
+  background: var(--landing-ink);
+  color: var(--landing-paper-light) !important;
+}
+
+.landing-button--primary:hover {
+  background: var(--landing-copper);
+}
+
+.landing-button--text {
+  min-height: 44px;
+  padding-inline: 0;
+  color: var(--landing-ink) !important;
+}
+
+.landing-play {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 34px;
+  height: 34px;
+  border: 1px solid var(--landing-line-strong);
+  border-radius: 50%;
+  transition: border-color 180ms ease, background-color 180ms ease, color 180ms ease;
+}
+
+.landing-button--text:hover .landing-play {
+  border-color: var(--landing-copper);
+  background: rgba(181, 73, 42, 0.1);
+  color: var(--landing-copper);
+}
+
+.landing-button--light {
+  margin-block-start: 34px;
+  background: var(--landing-paper-light);
+  color: var(--landing-ink) !important;
+}
+
+.landing-button--light:hover {
+  background: var(--landing-copper-bright);
+  color: white !important;
+}
+
+@keyframes landing-rise {
+  from {
+    opacity: 0;
+    translate: 0 16px;
+  }
+  to {
+    opacity: 1;
+    translate: 0;
+  }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  html {
+    scroll-behavior: smooth;
+    interpolate-size: allow-keywords;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .landing-page *,
+  .landing-page *::before,
+  .landing-page *::after {
+    scroll-behavior: auto !important;
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+@media (forced-colors: active) {
+  .landing-header__cta,
+  .landing-button,
+  .landing-menu,
+  .feature-card__icon {
+    border: 1px solid ButtonText;
+  }
+
+  .landing-menu a.target-current {
+    text-decoration: underline;
+  }
+}

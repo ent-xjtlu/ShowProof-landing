@@ -11,8 +11,8 @@ test('宣传页展示产品价值、核心能力与宣传片', async ({ page, re
 
   const video = page.getByLabel('展视宣传片')
   await expect(video).toHaveAttribute('controls', '')
-  await expect(video).toHaveAttribute('src', '/exvis-overview-zh.mp4')
-  expect((await request.get('/exvis-overview-zh.mp4')).ok()).toBe(true)
+  await expect(video).toHaveAttribute('src', '/exvis-overview.mp4')
+  expect((await request.get('/exvis-overview.mp4')).ok()).toBe(true)
 })
 
 test('独立站按钮均为页内跳转且不包含联系方式', async ({ page }) => {
@@ -113,16 +113,42 @@ test('英文长文案在不同宽度下保持在功能卡内', async ({ page }) 
   }
 })
 
-test('宣传片默认静音并跟随页面语言', async ({ page }) => {
+test('中英文模式均使用同一宣传片且默认静音', async ({ page }) => {
   await page.goto('/?lang=en#demo')
   const player = page.locator('#demo video')
   await expect(player).toHaveCount(1)
   await expect(page.locator('#demo button')).toHaveCount(0)
-  await expect(player).toHaveAttribute('src', '/exvis-overview-en.mp4')
+  await expect(player).toHaveAttribute('src', '/exvis-overview.mp4')
   await expect(player).toHaveJSProperty('muted', true)
 
   await page.getByRole('button', { name: '切换到中文' }).click()
-  await expect(player).toHaveAttribute('src', '/exvis-overview-zh.mp4')
+  await expect(player).toHaveAttribute('src', '/exvis-overview.mp4')
   await expect(player).toHaveJSProperty('muted', true)
   await expect(page).toHaveURL(/lang=zh#demo$/)
+})
+
+test('首屏参展报告支持展开企业判断依据与切换预算方案', async ({ page }) => {
+  await page.goto('/')
+  const report = page.locator('.hero-report')
+
+  await expect(report).toContainText('公开产线升级公告提及高速输送线电机在线测振需求')
+  await report.getByRole('button', { name: /序合自动化/ }).click()
+  await expect(report).toContainText('承接华东工厂数智化改造')
+
+  await report.getByRole('button', { name: '标准展位' }).click()
+  await expect(report).toContainText('标准参展预算')
+  await expect(report).toContainText('¥32,000')
+})
+
+test('移动端菜单按钮正确同步 aria-expanded 状态', async ({ page }) => {
+  await page.setViewportSize({ width: 390, height: 844 })
+  await page.goto('/')
+
+  const menuButton = page.getByRole('button', { name: '菜单' })
+  await expect(menuButton).toHaveAttribute('aria-expanded', 'false')
+  await menuButton.click()
+  await expect(menuButton).toHaveAttribute('aria-expanded', 'true')
+
+  await page.getByRole('navigation', { name: '主要导航' }).getByRole('link', { name: '常见问题' }).click()
+  await expect(menuButton).toHaveAttribute('aria-expanded', 'false')
 })
